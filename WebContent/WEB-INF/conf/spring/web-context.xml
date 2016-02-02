@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:oxm="http://www.springframework.org/schema/oxm"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd">
+
+    <!-- Enable scanning of spring @Configuration classes -->
+    <context:annotation-config/>
+    
+    <!-- Scans the classpath of the application for @Components to deploy as beans -->
+    <context:component-scan base-package="com.dsr.cloud.backend" />
+    <context:component-scan base-package="com.greenlive.home" />
+    <context:component-scan base-package="com.dsr.gateway.manager.controller" />
+    
+     <!--  透传MVC -->
+    <mvc:resources mapping="/demo/**" location="/demo/" cache-period="31556926"/>  
+    
+    <!-- Configures the @Controller programming model -->
+    <mvc:annotation-driven>
+        <mvc:message-converters register-defaults="false">
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+    <bean id="customDateFormat" class="com.dsr.gateway.manager.util.ThreadSafeSimpleDateFormat">
+        <constructor-arg value="yyyy-MM-dd HH:mm:ss" />
+    </bean>
+    
+</beans>

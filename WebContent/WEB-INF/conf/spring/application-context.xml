@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+                http://www.springframework.org/schema/rabbit http://www.springframework.org/schema/rabbit/spring-rabbit.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd		
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.2.xsd
+                http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo-1.3.xsd">
+
+    <!-- Define your application beans here. They will be available to the beans 
+    defined in your web-context because it is a sub-context. Beans defined in 
+    the web-context will not be available in the application context. -->
+
+    <!-- Enable support of configuration with annotations like @Service or @Component -->
+    <context:annotation-config />
+        
+    <!-- Define path to scan classes for annotations -->
+    <context:component-scan base-package="com.dsr.cloud.backend">
+        
+    </context:component-scan>
+    <!-- Define path to scan classes for annotations -->
+    <context:component-scan base-package="com.dsr.gateway.manager">
+        <context:exclude-filter type="regex" expression="com\.dsr\.gateway\.manager\.controller\..*" />
+    </context:component-scan>
+
+    <!-- Enable support of @Async and @Scheduled annotations -->
+    <task:annotation-driven />
+	
+    <!-- Scheduler for tasks of the server-to-gateway command manager -->
+    	<bean id="sourceIdParse" class="com.dsr.cloud.backend.task.SourceIdParse">
+	</bean>
+	
+<!-- 
+	<bean id="generateCommand" class="com.dsr.cloud.backend.task.TestGenerateCommand">
+	<constructor-arg index="0" type="Integer">           
+			<value>2</value>       
+		</constructor-arg> 
+	</bean>
+	 -->
+	
+	
+		<!-- 	
+	<task:scheduled-tasks scheduler="taskScheduler">
+		<task:scheduled ref="sourceIdParse" method="parseExcel" cron="0 0/2 * * * ?"/>
+		<task:scheduled ref="generateCommand" method="generateCommand" cron="0 0/1 * * * ?"/>
+	</task:scheduled-tasks>
+    
+    <task:scheduler id="taskScheduler" pool-size="10" />
+		 -->
+
+    <context:property-placeholder
+        location="classpath:shim.test.properties, ${shim.test.properties.location:classpath:shim.test.properties}" />	
+</beans>
